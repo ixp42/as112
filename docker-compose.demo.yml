@@ -1,0 +1,28 @@
+version: '3.5'
+
+services:
+  as112bird:
+    container_name: as112bird
+    image: ghcr.io/ixp42/as112:master
+    environment:
+      - NEI4=169.254.1.1
+      - NEI6=2a0e:b107:b7a::1
+      - IP4=169.254.1.12/24
+      - IP6=2a0e:b107:b7a::12/64
+    restart: always
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.default.disable_ipv6=0
+    cap_add: 
+      - NET_ADMIN
+    networks:
+      default:
+      ixdockernet:
+
+networks:
+  ixdockernet:
+    name: 'ixdockernet'
+    driver_opts:
+      com.docker.network.bridge.name: ixdockernet
+      com.docker.network.bridge.enable_ip_masquerade: 'false'
+    driver: bridge
